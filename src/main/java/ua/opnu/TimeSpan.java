@@ -1,46 +1,71 @@
 package ua.opnu;
 
-
 public class TimeSpan {
 
-    // TODO: add class fields
+    private int hours;
+    private int minutes;
 
+    // Конструктор
     TimeSpan(int hours, int minutes) {
-        // TODO: write constructor body
+        if (hours < 0 || minutes < 0 || minutes >= 60) {
+            this.hours = 0;
+            this.minutes = 0;
+        } else {
+            this.hours = hours;
+            this.minutes = minutes;
+        }
     }
 
     int getHours() {
-        return 0;
+        return hours;
     }
 
     int getMinutes() {
-        // TODO: write method body
-        return 0;
+        return minutes;
     }
 
     void add(int hours, int minutes) {
-        // TODO: write method body
+        if (hours < 0 || minutes < 0 || minutes >= 60) {
+            return; // некоректні аргументи — нічого не міняємо
+        }
+
+        int totalMinutes = this.hours * 60 + this.minutes + hours * 60 + minutes;
+        this.hours = totalMinutes / 60;
+        this.minutes = totalMinutes % 60;
     }
 
     void addTimeSpan(TimeSpan timespan) {
-        // TODO: write method body
+        add(timespan.getHours(), timespan.getMinutes());
     }
 
     double getTotalHours() {
-        // TODO: write method body
-        return 0;
+        return this.hours + this.minutes / 60.0;
     }
 
     int getTotalMinutes() {
-        // TODO: write method body
-        return 0;
+        return this.hours * 60 + this.minutes;
     }
 
     void subtract(TimeSpan span) {
-        // TODO: write method body
+        int totalCurrent = this.getTotalMinutes();
+        int totalOther = span.getTotalMinutes();
+
+        if (totalOther > totalCurrent) {
+            return; // не змінюємо (можна кинути виняток, але тести цього не вимагають)
+        }
+
+        int result = totalCurrent - totalOther;
+        this.hours = result / 60;
+        this.minutes = result % 60;
     }
 
     void scale(int factor) {
-        // TODO: write method body
+        if (factor <= 0) {
+            return; // не змінюємо, якщо factor недопустимий
+        }
+
+        int totalMinutes = this.getTotalMinutes() * factor;
+        this.hours = totalMinutes / 60;
+        this.minutes = totalMinutes % 60;
     }
 }
